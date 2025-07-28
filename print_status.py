@@ -28,7 +28,7 @@ def report_print_status(socket):
     while True:
         status = get_printer_status(socket)
 
-        if status['CurrentFile'] == None:
+        if not status['CurrentFile']:
             print ('No active print job.')
             return
 

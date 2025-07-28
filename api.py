@@ -111,19 +111,16 @@ def get_print_progress(socket):
 
 def get_printer_status(socket):
     info_result = send_and_receive(socket, b'~M119\r\n')
-
     printer_info = {}
     printer_info_fields = ['Status', 'MachineStatus', 'MoveMode', 'Endstop', 'LED', 'CurrentFile']
     for field in printer_info_fields:
         regex_string = field + ': ?(.+?)\\r\\n'
         match = re.search(regex_string, info_result.decode())
-
         if match:
-            printer_info[field] = match.groups()[0]
+            printer_info[field] = match.groups()[0].strip()
         else:
             # Provide a default value if the field is not found
-            printer_info[field] = None if field == 'CurrentFile' else None
-
+            printer_info[field] = None
     return printer_info
 
 def upload_file(socket, filename):
@@ -229,7 +226,7 @@ def unload_filament(socket):
 def get_temperatures(socket):
     info_result = send_and_receive(socket, '~M105\r\n'.encode())
 
-    pattern = re.compile(r'T0:(\d+) /(\d+) B:(\d+)/(\d+)')
+    pattern = re.compile(r'T0:(\d+)/(\d+) B:(\d+)/(\d+)')
     match = pattern.search(info_result.decode('utf-8'))
     if match:
         return {
