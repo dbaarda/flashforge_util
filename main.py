@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import argparse
 import os
 import time
@@ -67,6 +68,8 @@ def main():
             print(f"Printer Name: {printer_name}, IP Address: {printer_ip}")
         else:
             print("Printer not found.")
+            exit(1)
+        exit(0)
 
     global socket
 
